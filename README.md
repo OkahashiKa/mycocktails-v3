@@ -53,6 +53,46 @@ Nuxt の公式で ESLint のモジュールが提供されているため、基�
    }
    ```
 
+## Supabase
+
+[mycocktails-v3](https://supabase.com/dashboard/project/ccvudjdclapiexubmnzr)
+
+### 環境構築
+
+[Use Supabase with NuxtJS](https://supabase.com/docs/guides/getting-started/quickstarts/nuxtjs)
+
+1. インストール
+
+   ```bash
+   yarn add @supabase/supabase-js
+   ```
+
+2. /plugin 内に supabase.ts を作成する
+
+   ```ts
+   import { createClient } from "@supabase/supabase-js";
+
+   export default defineNuxtPlugin(() => {
+     const supabaseUrl = "https://ccvudjdclapiexubmnzr.supabase.co";
+     const supabaseKey =
+       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjdnVkamRjbGFwaWV4dWJtbnpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI5NzA0OTgsImV4cCI6MjA0ODU0NjQ5OH0.RBngWPU-muRzajZoY72I0bSV3UBNQpsRict13RuXJ_A";
+     const supabase = createClient(supabaseUrl, supabaseKey);
+
+     return {
+       provide: {
+         supabase,
+       },
+     };
+   });
+   ```
+
+   defineNuxtPlugin 内で provide を使用することで、アプリ全体にカスタムプロパティを注入することができる。
+   注入されたプロパティは、useNuxtApp() を通じてどこでもアクセス可能。
+
+   ```ts
+   const { $supabase } = useNuxtApp();
+   ```
+
 ## reference
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
