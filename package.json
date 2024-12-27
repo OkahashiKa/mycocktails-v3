@@ -15,11 +15,13 @@
     "@supabase/supabase-js": "^2.46.2",
     "nuxt": "^3.14.1592",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "^4.5.0"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "devDependencies": {
     "@nuxt/eslint": "0.7.2",
+    "@supa-kit/auth-ui-vue": "^0.3.8",
+    "@supabase/auth-ui-shared": "^0.1.8",
     "eslint": "^9.15.0",
     "typescript": "^5.7.2"
   }
