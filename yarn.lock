@@ -1389,12 +1389,22 @@
     estraverse "^5.3.0"
     picomatch "^4.0.2"
 
+"@supa-kit/auth-ui-vue@^0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@supa-kit/auth-ui-vue/-/auth-ui-vue-0.3.8.tgz#40c2c4901575086faba8c80aeb7c9f5ffb13966d"
+  integrity sha512-TOp2lMtFCOPHeu5Xcs4peVrjWTL5koi5LYuA9LidDzBkGvckcvd9yW0luzjk54jCIa/hG257O3g33qJgXQgduQ==
+
 "@supabase/auth-js@2.65.1":
   version "2.65.1"
   resolved "https://registry.yarnpkg.com/@supabase/auth-js/-/auth-js-2.65.1.tgz#4f6ab9ece2e6613d2648ecf5482800f3766479ea"
   integrity sha512-IA7i2Xq2SWNCNMKxwmPlHafBQda0qtnFr8QnyyBr+KaSxoXXqEzFCnQ1dGTy6bsZjVBgXu++o3qrDypTspaAPw==
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
+
+"@supabase/auth-ui-shared@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-ui-shared/-/auth-ui-shared-0.1.8.tgz#1ce63c4ac58f29d7c76436b774b0e8809dd08617"
+  integrity sha512-ouQ0DjKcEFg+0gZigFIEgu01V3e6riGZPzgVD0MJsCBNsMsiDT74+GgCEIElMUpTGkwSja3xLwdFRFgMNFKcjg==
 
 "@supabase/functions-js@2.4.3":
   version "2.4.3"
@@ -6188,7 +6198,7 @@ vue-eslint-parser@^9.4.3:
     lodash "^4.17.21"
     semver "^7.3.6"
 
-vue-router@^4.4.5, vue-router@latest:
+vue-router@^4.4.5, vue-router@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.5.0.tgz#58fc5fe374e10b6018f910328f756c3dae081f14"
   integrity sha512-HDuk+PuH5monfNuY+ct49mNmkCRK4xJAV9Ts4z9UFc4rzdDnxQLyCMGGc8pKhZhHTVzfanpNwB/lwqevcBwI4w==

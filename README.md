@@ -53,6 +53,30 @@ Nuxt の公式で ESLint のモジュールが提供されているため、基�
    }
    ```
 
+## VueRouter
+
+Vue3 ではページルーティングが提供されているため、これを使用してルーティングを実現する。
+
+1. ページルーテイングの有効化
+   nuxt.config.ts を編集する
+
+   ```ts
+   export default defineNuxtConfig({
+     pages: true,
+   });
+   ```
+
+2. app.vue の設定
+   `<router-view />`タグで囲ってある箇所がルーティングの対象となるため app.vue に設定する
+
+   ```vue
+   <template>
+     <div>
+       <router-view />
+     </div>
+   </template>
+   ```
+
 ## Supabase
 
 [mycocktails-v3](https://supabase.com/dashboard/project/ccvudjdclapiexubmnzr)
@@ -91,6 +115,53 @@ Nuxt の公式で ESLint のモジュールが提供されているため、基�
 
    ```ts
    const { $supabase } = useNuxtApp();
+   ```
+
+### Supabase Auth
+
+※フェーズ 1 では認証は実装せず基本となる機能を実装する
+
+認証機能については Supabase の認証機能を使用し、UI についても Supabase が提供しているものを使用する。
+※今後サイト全体のレイアウトが確定した際に、必要であれば実装し直す。
+
+[Supabase Docs Auth UI](https://supabase.com/docs/guides/auth/auth-helpers/auth-ui)
+
+1. 必要パッケージのインストール
+
+   ```bash
+   yarn add @supabase/auth-ui-shared @supa-kit/auth-ui-vue
+   ```
+
+2. `<Auth>`コンポーネントを使用して認証を実装する
+
+   ```ts
+   <script setup>
+   import { ThemeSupa } from "@supabase/auth-ui-shared";
+   import { Auth } from "@supa-kit/auth-ui-vue";
+   </script>
+
+   <template>
+     <Auth
+       :supabase-client="$supabase"
+       :providers="['google', 'github']"
+       :appearance="{
+         theme: ThemeSupa,
+       }"
+     />
+   </template>
+   ```
+
+   ![supabase-auth-ui](/images/supabase-auth-ui.png)
+
+3. `onAuthStateChange`を使用してログイン状態を監視する
+   Vue Router は SPA として動作するため、redirectTo がフルリロード（完全な URL のリダイレクト）をトリガーし正しくリダイレクトが行われないため`onAuthStateChange`でログイン状態を監視し、vueRouter の機能でリダイレクトを行う
+
+   ```ts
+   $supabase.auth.onAuthStateChange((event) => {
+     if (event === "SIGNED_IN") {
+       router.push("/home");
+     }
+   });
    ```
 
 ## reference

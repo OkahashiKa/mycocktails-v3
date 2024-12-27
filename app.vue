@@ -1,25 +1,19 @@
-<script setup>
-const cocktails = ref([]);
+<script setup lang="ts">
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { Auth } from "@supa-kit/auth-ui-vue";
+
 const { $supabase } = useNuxtApp();
-
-async function getCocktails() {
-  const { data } = await $supabase.from("m_cocktail").select();
-  cocktails.value = data;
-}
-
-onMounted(() => {
-  getCocktails();
-});
+const { isLogin } = useLogin();
 </script>
 
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-    <ul>
-      <li v-for="cocktail in cocktails" :key="cocktail.id">
-        {{ cocktail.name }}
-      </li>
-    </ul>
-  </div>
+  <Auth
+    v-if="!isLogin"
+    :supabase-client="$supabase"
+    :providers="['google', 'github']"
+    :appearance="{
+      theme: ThemeSupa,
+    }"
+  />
+  <router-view v-else />
 </template>
