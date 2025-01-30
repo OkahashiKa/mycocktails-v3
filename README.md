@@ -77,6 +77,67 @@ Vue3 ではページルーティングが提供されているため、これを
    </template>
    ```
 
+## Vuetify
+
+後々は UI コンポーネントも自作していきたいが、一旦は開発効率を高めるために UI フレームワークを使用する。
+
+1. vuetify を追加する
+
+   ```bash
+   yarn add -D vuetify vite-plugin-vuetify
+   yarn add @mdi/font
+   ```
+
+2. nuxt.config.ts を編集する
+
+   ```ts
+   import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+   export default defineNuxtConfig({
+     build: {
+       transpile: ["vuetify"],
+     },
+     modules: [
+       (_options, nuxt) => {
+         nuxt.hooks.hook("vite:extendConfig", (config) => {
+           config.plugins.push(vuetify({ autoImport: true }));
+         });
+       },
+     ],
+     vite: {
+       vue: {
+         template: {
+           transformAssetUrls,
+         },
+       },
+     },
+     css: ["@mdi/font/css/materialdesignicons.css"],
+   });
+   ```
+
+3. plugins/vuetify.ts を作成する
+
+   ```ts
+   import "vuetify/styles";
+   import { createVuetify } from "vuetify";
+
+   export default defineNuxtPlugin((app) => {
+     const vuetify = createVuetify({});
+     app.vueApp.use(vuetify);
+   });
+   ```
+
+4. app.vue に v-app コンポーネントの追加
+
+   ```ts
+   <template>
+     <v-app>
+       <NuxtPage />
+     </v-app>
+   </template>
+   ```
+
+[vuetify getting-started](https://vuetifyjs.com/en/getting-started/installation/#using-nuxt-3)
+
 ## Supabase
 
 [mycocktails-v3](https://supabase.com/dashboard/project/ccvudjdclapiexubmnzr)
@@ -164,7 +225,56 @@ Vue3 ではページルーティングが提供されているため、これを
    });
    ```
 
+### Supabase の型生成
+
+supabase 上で使用している型を自動生成する提供する機能を持っているため、これを使用して型安全に開発を行う。
+
+#### supabase の型の自動生成
+
+1. supabase CLI のインストール
+
+   ```bash
+   yarn add supabase
+   ```
+
+2. supabase の初期化
+   /supabase フォルダさ作成され、設定ファイルが格納されます。
+
+   ```bash
+   supabase init
+   ```
+
+3. Supabase Project の連携
+   型を自動生成する Supabase Project と連携します。
+   Reference ID は、Project Settings から取得できます。
+
+   ```bash
+   supabase link --project-ref <プロジェクトのReference ID>
+   ```
+
+4. 型の生成
+
+   ```bash
+   supabase gen types typescript --linked > types/supabase.ts
+   ```
+
+#### 型安全なデータ取得
+
+supabaseClient を生成する際に、上記で生成した型の`Database`を設定することで`supabase.from.select()`等を行う際に自動的に型付けが行われ、型安全にデータ操作が可能です。
+
+```ts
+const supabase = createClient<Database>(supabaseUrl, supabaseKey);
+```
+
+![type safe select](images/2025-01-11-01-07-51.png)
+
+Supabase 上のデータベース定義を更新した場合は、再度型の自動生成を行い定義を更新する。
+
 ## reference
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## pass
+
+supabaseDB: 2W7ePy4PmrejIGWz
