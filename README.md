@@ -77,6 +77,67 @@ Vue3 ではページルーティングが提供されているため、これを
    </template>
    ```
 
+## Vuetify
+
+後々は UI コンポーネントも自作していきたいが、一旦は開発効率を高めるために UI フレームワークを使用する。
+
+1. vuetify を追加する
+
+   ```bash
+   yarn add -D vuetify vite-plugin-vuetify
+   yarn add @mdi/font
+   ```
+
+2. nuxt.config.ts を編集する
+
+   ```ts
+   import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+   export default defineNuxtConfig({
+     build: {
+       transpile: ["vuetify"],
+     },
+     modules: [
+       (_options, nuxt) => {
+         nuxt.hooks.hook("vite:extendConfig", (config) => {
+           config.plugins.push(vuetify({ autoImport: true }));
+         });
+       },
+     ],
+     vite: {
+       vue: {
+         template: {
+           transformAssetUrls,
+         },
+       },
+     },
+     css: ["@mdi/font/css/materialdesignicons.css"],
+   });
+   ```
+
+3. plugins/vuetify.ts を作成する
+
+   ```ts
+   import "vuetify/styles";
+   import { createVuetify } from "vuetify";
+
+   export default defineNuxtPlugin((app) => {
+     const vuetify = createVuetify({});
+     app.vueApp.use(vuetify);
+   });
+   ```
+
+4. app.vue に v-app コンポーネントの追加
+
+   ```ts
+   <template>
+     <v-app>
+       <NuxtPage />
+     </v-app>
+   </template>
+   ```
+
+[vuetify getting-started](https://vuetifyjs.com/en/getting-started/installation/#using-nuxt-3)
+
 ## Supabase
 
 [mycocktails-v3](https://supabase.com/dashboard/project/ccvudjdclapiexubmnzr)

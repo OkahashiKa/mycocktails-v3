@@ -1,50 +1,31 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import type { Cocktail } from "~/types/database";
 
-const userId = ref<string>("");
 const cocktails = ref<Cocktail[]>([]);
+const dialog = ref(false);
 
-const { $supabase } = useNuxtApp();
+const router = useRouter();
+const { fetchCocktailByIds } = useCocktail();
+const { userMaterials } = useUserMaterial();
+const { fetchCocktailRecipesByMaterialIds, fetchCocktailRecipesByCocktailIds } =
+  useCocktailRecipe();
 
-async function fetchCocktailByIds(ids: string[]) {
-  return (await $supabase.from("m_cocktail").select().in("id", ids)).data;
-}
+onMounted(() => {
+  fetchUserCocktails();
+});
 
-const fetchUserMaterials = async () => {
-  return (await $supabase.from("t_user_material").select()).data;
-};
-
-const fetchCocktailMaterialByMaterialIds = async (materialIds: string[]) => {
-  return (
-    await $supabase
-      .from("m_cocktail_material")
-      .select()
-      .in("material_id", materialIds)
-  ).data;
-};
-
-const fetchCocktailMaterialsByCocktailIds = async (cocktailIds: string[]) => {
-  return (
-    await $supabase
-      .from("m_cocktail_material")
-      .select()
-      .in("cocktail_id", cocktailIds)
-  ).data;
-};
-
-onMounted(async () => {
-  // ログインユーザーIDの取得
-  // TODO: useUserのみたいなcomposable化する
-  userId.value = (await $supabase.auth.getUser()).data.user?.id ?? "";
-
-  // ユーザー材料を取得する
-  const userMaterials = await fetchUserMaterials();
+// ユーザー材料取得後にユーザーカクテルを取得
+watch(userMaterials, async () => {
   if (!userMaterials) return;
+  fetchUserCocktails();
+});
 
-  const userMaterialIds = userMaterials.map((x) => x.material_id);
+const fetchUserCocktails = async () => {
+  const userMaterialIds = userMaterials.value.map((x) => x.material_id);
 
   // ユーザー材料を含むカクテルレシピを全件取得する
-  const relatedCocktailMaterials = await fetchCocktailMaterialByMaterialIds(
+  const relatedCocktailMaterials = await fetchCocktailRecipesByMaterialIds(
     userMaterialIds
   );
   if (!relatedCocktailMaterials) return;
@@ -55,7 +36,7 @@ onMounted(async () => {
   ];
 
   // 対象のカクテルに必要なレシピを全件取得
-  const requiredCocktailMaterials = await fetchCocktailMaterialsByCocktailIds(
+  const requiredCocktailMaterials = await fetchCocktailRecipesByCocktailIds(
     uniqueCocktailIds
   );
   if (!requiredCocktailMaterials) return;
@@ -74,16 +55,27 @@ onMounted(async () => {
   if (!availableCocktails) return;
 
   cocktails.value = availableCocktails;
-});
+};
 </script>
 
 <template>
   <div>
-    <h2>作成可能なカクテル</h2>
-    <ul>
-      <li v-for="cocktail in cocktails" :key="cocktail.id">
+    <h2>現在作成可能なカクテル</h2>
+    <v-card
+      v-for="cocktail in cocktails"
+      :key="cocktail.id"
+      class="mx-auto"
+      max-width="250"
+      @click="dialog = true"
+    >
+      <v-img :width="250" cover :src="cocktail.image!" />
+      <v-card-title>
         {{ cocktail.name }}
-      </li>
-    </ul>
+      </v-card-title>
+      <v-dialog v-model="dialog" width="auto">
+        <v-card :title="cocktail.name" />
+      </v-dialog>
+    </v-card>
+    <v-btn text="ユーザー材料の登録" @click="router.push('./userMaterial')" />
   </div>
 </template>

@@ -61,7 +61,7 @@ export type Database = {
         }
         Relationships: []
       }
-      m_cocktail_material: {
+      m_cocktail_recipe: {
         Row: {
           cocktail_id: string
           create_at: string
@@ -96,6 +96,13 @@ export type Database = {
             columns: ["material_id"]
             isOneToOne: false
             referencedRelation: "m_material"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "m_cocktail_material_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "v_material"
             referencedColumns: ["id"]
           },
         ]
@@ -155,31 +162,49 @@ export type Database = {
       }
       t_user_material: {
         Row: {
-          create_at: string
+          create_at: string | null
           delete_at: string | null
           material_id: string
-          update_at: string
+          update_at: string | null
           user_id: string
         }
         Insert: {
-          create_at: string
+          create_at?: string | null
           delete_at?: string | null
           material_id: string
-          update_at: string
+          update_at?: string | null
           user_id: string
         }
         Update: {
-          create_at?: string
+          create_at?: string | null
           delete_at?: string | null
           material_id?: string
-          update_at?: string
+          update_at?: string | null
           user_id?: string
         }
         Relationships: []
       }
     }
     Views: {
-      [_ in never]: never
+      v_material: {
+        Row: {
+          category_id: string | null
+          category_name: string | null
+          create_at: string | null
+          id: string | null
+          name: string | null
+          update_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "m_material_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "m_material_category"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

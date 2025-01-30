@@ -1,14 +1,16 @@
-const isLogin = ref(false);
-const loginUser = ref("");
+const isLogin = ref<boolean>(false);
+const loginUserId = ref<string>("");
 
-export const useLogin = () => {
+export const useAuth = () => {
   const { $supabase } = useNuxtApp();
 
   /** セッションの確認 */
   $supabase.auth.getSession().then(({ data }) => {
     if (data.session) {
       isLogin.value = true;
-      $supabase.auth.getUser().then((x) => (loginUser.value = x.data.user!.id));
+      $supabase.auth
+        .getUser()
+        .then((x) => (loginUserId.value = x.data.user!.id));
     }
   });
 
@@ -17,12 +19,14 @@ export const useLogin = () => {
     if (event == "SIGNED_IN") {
       isLogin.value = true;
       // ユーザーGUIDを取得する
-      $supabase.auth.getUser().then((x) => (loginUser.value = x.data.user!.id));
+      $supabase.auth
+        .getUser()
+        .then((x) => (loginUserId.value = x.data.user!.id));
     }
   });
 
   return {
     isLogin,
-    loginUser,
+    loginUserId,
   };
 };
