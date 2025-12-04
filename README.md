@@ -277,4 +277,4 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 ## pass
 
-supabaseDB: 2W7ePy4PmrejIGWz
+supabaseDB: nZIZDpJDsNNGwlNT
