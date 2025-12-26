@@ -270,6 +270,57 @@ const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
 Supabase 上のデータベース定義を更新した場合は、再度型の自動生成を行い定義を更新する。
 
+## 環境変数
+
+OpenAI・Supabase との連携や Wikipedia フォールバック画像は `.env` で管理する。まずは `.env.example` をコピーして値を設定する。
+
+```bash
+cp .env.example .env
+```
+
+| 変数名 | 用途 |
+| --- | --- |
+| `OPENAI_API_KEY` | Structured Outputs を呼び出すための OpenAI API キー |
+| `OPENAI_PROJECT_ID` | OpenAI プロジェクト ID（未使用なら空でも可） |
+| `SUPABASE_URL` | Supabase プロジェクトの URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | サーバーサイドで材料情報を取得するための Service Role キー |
+| `USER_COCKTAIL_LIMIT` | 一度に返却するカクテルの最大件数（既定 100） |
+| `WIKIPEDIA_IMAGE_FALLBACK` | 画像検証で弾かれた際に使用するダミー画像へのパス |
+
+フロント側の `plugins/supabase.ts` は引き続き anon キーをハードコードしている。将来的に `.env` へ移行予定のため、管理しやすいようにコメントを残している。
+
+## ユーザーカクテル API
+
+`GET /api/user-cocktails/:userId` で以下のレスポンスを返す。
+
+```jsonc
+{
+  "total": 25,
+  "cocktails": [
+    {
+      "id": "negroni",
+      "name": "ネグローニ",
+      "description": "～",
+      "image_url": "https://upload.wikimedia.org/...",
+      "difficulty": "normal",
+      "alcohol_level": "high",
+      "ingredients": [
+        { "name": "ジン", "amount": "30ml", "is_user_material": true }
+      ],
+      "missing_ingredients": [],
+      "steps": ["グラスに氷を入れ、ステアする"]
+    }
+  ]
+}
+```
+
+- Supabase からユーザー材料（v\_material ビュー経由）を取得する
+- OpenAI Responses API + Structured Outputs で最大 100 件のカクテル案を取得する
+- Wikipedia/Wikimedia 以外の画像 URL は `/images/noimage-760x460.png` へ差し替える
+- `limit` クエリを指定すると、環境変数 `USER_COCKTAIL_LIMIT` を上限とした件数に絞り込める
+
+フロントエンドでは `pages/cocktails/[userId].vue` が同 API を呼び出し、カード UI として表示する。トップページ（`/`）はログイン完了後に `/cocktails/{userId}` へ自動遷移するように変更済み。
+
 ## reference
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
