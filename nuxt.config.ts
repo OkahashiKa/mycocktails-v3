@@ -23,4 +23,21 @@ export default defineNuxtConfig({
     },
   },
   css: ["@mdi/font/css/materialdesignicons.css"],
+  runtimeConfig: {
+    openai: {
+      apiKey: process.env.OPENAI_API_KEY,
+      projectId: process.env.OPENAI_PROJECT_ID,
+    },
+    supabase: {
+      url: process.env.SUPABASE_URL,
+      serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    },
+    userCocktailLimit: process.env.USER_COCKTAIL_LIMIT ?? "100",
+    wikipediaImageFallback:
+      process.env.WIKIPEDIA_IMAGE_FALLBACK ?? "/images/noimage-760x460.png",
+    public: {
+      userCocktailFallbackImage:
+        process.env.WIKIPEDIA_IMAGE_FALLBACK ?? "/images/noimage-760x460.png",
+    },
+  },
 });
