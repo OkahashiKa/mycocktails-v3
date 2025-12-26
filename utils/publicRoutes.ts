@@ -1,4 +1,4 @@
-const publicPaths = ["/user"]; // add additional paths here to skip authentication
+const publicPaths = ["/cocktails"]; // add additional paths here to skip authentication
 
 const normalizePath = (path: string) => {
   if (!path) return "/";
