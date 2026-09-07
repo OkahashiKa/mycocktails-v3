@@ -1,3 +1,5 @@
+> **このリポジトリはアーカイブ済み。完成版は https://github.com/OkahashiKa/mycocktails-v4**
+
 # mycocktails-v3
 
 mycocktails-v3 の フロントエンド を Nuxt.js(vue3) に置き換え
